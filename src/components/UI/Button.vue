@@ -1,14 +1,19 @@
 <template>
-  <button class="btn" @click="openModal">
+  <button class="btn">
+    <span
+      class="material-icons"
+      :style="{ color: btnProps.color }"
+      >{{ btnProps.name }}</span
+    >
     <slot></slot>
   </button>
 </template>
-<script>
+<script lang="ts">
 export default {
   name: "v-btn",
-  methods: {
-    openModal() {
-      this.$emit("openModal");
+  props: {
+    btnProps: {
+      type: Object,
     },
   },
 };
@@ -16,9 +21,13 @@ export default {
 
 <style scoped lang="scss">
 .btn {
-  background-color: #ffffff;
-  color: #000000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: 300px;
+  padding: 5px 15px;
   font-family: "JetBrains Mono Medium", sans-serif;
-  border: 1px solid #000000;
+  background-color: #1a73e8;
+  color: #ffffff;
 }
 </style>

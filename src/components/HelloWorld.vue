@@ -1,11 +1,10 @@
 <template>
   <div>
-    <v-btn @click="getPostList">Загрузить посты</v-btn>
     <v-input v-model="modelValue" placeholder="Ввод" />
-    <v-btn @click="openModal">Открыть модалку</v-btn>
+    <v-btn @click="openModal" :btnProps="btnProps"> Открыть модалку </v-btn>
     <v-select v-model="selected" :options="sortOptions"></v-select>
     <v-modal v-model:show="showModal"> {{ modelValue }}</v-modal>
-    <v-table :dataValues="dataValues" :columns="columns" :dateNow="dateNow"></v-table>
+    <v-table :dataValues="posts" :columns="columns"></v-table>
   </div>
 </template>
 <script>
@@ -14,21 +13,30 @@ import VInput from "@/components/UI/Input";
 import VBtn from "@/components/UI/Button";
 import VSelect from "@/components/UI/Select";
 import VModal from "@/components/UI/Modal";
-import axios from "axios";
+import { usePosts } from "@/hooks/usePosts";
 
 export default {
   name: "HelloWorld",
   components: { VTable, VModal, VSelect, VBtn, VInput },
+  setup(props) {
+    const { posts, isPostLoading } = usePosts();
+    return {
+      posts,
+      isPostLoading,
+    };
+  },
   data() {
     return {
+      btnProps: {
+        name: "close",
+        color: "white",
+      },
       modelValue: "",
       selected: "",
       sortOptions: [{ value: "title", name: "название" }],
       showModal: false,
-      dataValues: [],
       columns: [
         { name: "id", text: "Id" },
-        { name: "data", text: "Дата" },
         { name: "title", text: "Заголовок" },
         { name: "body", text: "Содержание" },
       ],
@@ -40,18 +48,6 @@ export default {
     },
     openModal() {
       this.showModal = true;
-    },
-    async getPostList() {
-      try {
-        this.dateNow = new Date
-        const response = await axios.get(
-          "https://jsonplaceholder.typicode.com/posts?_limit=10"
-        );
-        this.dataValues = response.data;
-        console.log(response.data);
-      } catch (e) {
-        console.log(e);
-      }
     },
   },
 };

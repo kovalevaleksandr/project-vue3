@@ -13,25 +13,22 @@
         v-for="dataValue in dataValues"
     >
       <td>{{dataValue.id}}</td>
-      <td>{{dateNow}}</td>
 
       <td>{{dataValue.title}}</td>
-
 
       <td>{{dataValue.body}}</td>
     </tr>
   </table>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+export default{
   name: "v-table",
   props: {
     columns: {
       type: Array,
       default: [
         { name: "id", text: "Id" },
-        { name: "data", text: "Дата" },
         { name: "title", text: "Заголовок" },
         { name: "body", text: "Содержание" },
       ]
@@ -40,9 +37,6 @@ export default {
       type: Array,
       default: () => [],
     },
-    dateNow: {
-      type: [String, Number]
-    }
   },
   data() {
     return {};
