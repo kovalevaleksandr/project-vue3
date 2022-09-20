@@ -2,11 +2,23 @@
   <table>
     <thead>
       <tr>
-        <th v-for="column in columns" :key="column.name">{{ column.text }}</th>
+        <th
+            v-for="column in columns"
+            :key="column.name">
+          {{ column.text }}
+        </th>
       </tr>
     </thead>
-    <tr>
-      <td></td>
+    <tr
+        v-for="dataValue in dataValues"
+    >
+      <td>{{dataValue.id}}</td>
+      <td>{{dateNow}}</td>
+
+      <td>{{dataValue.title}}</td>
+
+
+      <td>{{dataValue.body}}</td>
     </tr>
   </table>
 </template>
@@ -15,10 +27,22 @@
 export default {
   name: "v-table",
   props: {
-    dataValue: {
+    columns: {
+      type: Array,
+      default: [
+        { name: "id", text: "Id" },
+        { name: "data", text: "Дата" },
+        { name: "title", text: "Заголовок" },
+        { name: "body", text: "Содержание" },
+      ]
+    },
+    dataValues: {
       type: Array,
       default: () => [],
     },
+    dateNow: {
+      type: [String, Number]
+    }
   },
   data() {
     return {};

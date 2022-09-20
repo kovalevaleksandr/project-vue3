@@ -5,7 +5,7 @@
     <v-btn @click="openModal">Открыть модалку</v-btn>
     <v-select v-model="selected" :options="sortOptions"></v-select>
     <v-modal v-model:show="showModal"> {{ modelValue }}</v-modal>
-    <v-table></v-table>
+    <v-table :dataValues="dataValues" :columns="columns" :dateNow="dateNow"></v-table>
   </div>
 </template>
 <script>
@@ -25,7 +25,7 @@ export default {
       selected: "",
       sortOptions: [{ value: "title", name: "название" }],
       showModal: false,
-      dataValue: [],
+      dataValues: [],
       columns: [
         { name: "id", text: "Id" },
         { name: "data", text: "Дата" },
@@ -43,10 +43,12 @@ export default {
     },
     async getPostList() {
       try {
+        this.dateNow = new Date
         const response = await axios.get(
           "https://jsonplaceholder.typicode.com/posts?_limit=10"
         );
-        this.dataValue = response.data;
+        this.dataValues = response.data;
+        console.log(response.data);
       } catch (e) {
         console.log(e);
       }
