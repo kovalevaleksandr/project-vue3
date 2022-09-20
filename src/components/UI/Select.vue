@@ -1,5 +1,5 @@
 <template>
-  <select :value="modelValue" @change="changeOption">
+  <select>
     <option disabled value="">Выберите из списка</option>
     <option v-for="option of options" :key="option.value" :value="option.value">
       {{ option.name }}
@@ -7,23 +7,24 @@
   </select>
 </template>
 
-<script>
-export default {
-  name: "v-select",
-  props: {
-    modelValue: {
-      type: String,
-    },
-    options: {
-      type: Array,
-      default: () => [],
-    },
+<script setup lang="ts">
+const props = defineProps({
+  modelValue: {
+    type: String,
   },
-  methods: {
-    changeOption(event) {
-      this.$emit("update:modelValue", event.target.value);
-    },
+  options: {
+    type: Array,
+    default: () => [],
   },
-};
+})
+
+const emits = defineEmits(
+    ["update:modelValue"]
+)
+
+// function changeOption(event:any):void {
+//   emits("update:modelValue", event.target.value);
+// }
+
 </script>
 <style scoped lang="scss"></style>

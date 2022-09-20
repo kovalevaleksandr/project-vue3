@@ -2,21 +2,18 @@
   <button class="btn">
     <span
       class="material-icons"
-      :style="{ color: btnProps.color }"
-      >{{ btnProps.name }}</span
+      :style="{ color: props.btnProps.color }"
+      >{{ props.btnProps.name }}</span
     >
     <slot></slot>
   </button>
 </template>
-<script lang="ts">
-export default {
-  name: "v-btn",
-  props: {
-    btnProps: {
-      type: Object,
-    },
+<script setup lang="ts">
+const props:any = defineProps({
+  btnProps: {
+    type: Object,
   },
-};
+})
 </script>
 
 <style scoped lang="scss">

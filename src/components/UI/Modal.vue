@@ -1,26 +1,22 @@
 <template>
-  <div class="modal" v-if="show" @click.stop="hideDialog">
+  <div class="modal" v-if="props.show" @click.stop="$emit('update:show', false)">
     <div class="modal__content">
       <slot></slot>
     </div>
   </div>
 </template>
 
-<script>
-export default {
-  name: "v-modal",
-  props: {
-    show: {
-      type: Boolean,
-      default: false,
-    },
-  },
-  methods: {
-    hideDialog() {
-      this.$emit("update:show", false);
-    },
-  },
-};
+<script setup lang="ts">
+const props = defineProps<{
+  show: boolean
+}>()
+
+// const emits = defineEmits([
+//
+// ])
+
+
+
 </script>
 
 <style scoped lang="scss">

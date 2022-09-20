@@ -1,13 +1,13 @@
 <template>
   <table>
     <thead>
-      <tr>
-        <th
-            v-for="column in columns"
-            :key="column.name">
-          {{ column.text }}
-        </th>
-      </tr>
+    <tr>
+      <th
+          v-for="column in columns"
+          :key="column.name">
+        {{ column.text }}
+      </th>
+    </tr>
     </thead>
     <tr
         v-for="dataValue in dataValues"
@@ -20,28 +20,19 @@
     </tr>
   </table>
 </template>
-
-<script lang="ts">
-export default{
-  name: "v-table",
-  props: {
-    columns: {
-      type: Array,
-      default: [
-        { name: "id", text: "Id" },
-        { name: "title", text: "Заголовок" },
-        { name: "body", text: "Содержание" },
-      ]
-    },
-    dataValues: {
-      type: Array,
-      default: () => [],
-    },
-  },
-  data() {
-    return {};
-  },
-};
+<script setup lang="ts">
+interface Props {
+  columns: object[]
+  dataValues: object[]
+}
+const props = withDefaults(defineProps<Props>(),{
+  columns: ()=> [
+    { name: "id", text: "Id" },
+    { name: "title", text: "Заголовок" },
+    { name: "body", text: "Содержание" },
+  ],
+  dataValues: ()=> []
+});
 </script>
 
 <style scoped lang="scss">

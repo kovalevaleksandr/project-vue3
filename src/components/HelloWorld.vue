@@ -1,55 +1,40 @@
 <template>
   <div>
-    <v-input v-model="modelValue" placeholder="Ввод" />
-    <v-btn @click="openModal" :btnProps="btnProps"> Открыть модалку </v-btn>
-    <v-select v-model="selected" :options="sortOptions"></v-select>
-    <v-modal v-model:show="showModal"> {{ modelValue }}</v-modal>
-    <v-table :dataValues="posts" :columns="columns"></v-table>
+    <VInput v-model="modelValue" placeholder="Ввод"/>
+    <VBtn @click="openModal" :btnProps="btnProps"> Открыть модалку</VBtn>
+    <VSelect v-model="selected" :options="sortOptions"></VSelect>
+    <VModal v-model:show="showModal"> {{ modelValue }}</VModal>
+    <VTable :dataValues="posts" :columns="columns"></VTable>
   </div>
 </template>
-<script>
-import VTable from "@/components/UI/Table";
-import VInput from "@/components/UI/Input";
-import VBtn from "@/components/UI/Button";
-import VSelect from "@/components/UI/Select";
-import VModal from "@/components/UI/Modal";
-import { usePosts } from "@/hooks/usePosts";
+<script setup lang="ts">
+import {ref} from "vue";
+import {usePosts} from "@/hooks/usePosts";
+import VTable from "./UI/Table.vue";
+import VInput from "@/components/UI/Input.vue";
+import VBtn from "@/components/UI/Button.vue";
+import VSelect from "@/components/UI/Select.vue";
+import VModal from "@/components/UI/Modal.vue";
 
-export default {
-  name: "HelloWorld",
-  components: { VTable, VModal, VSelect, VBtn, VInput },
-  setup(props) {
-    const { posts, isPostLoading } = usePosts();
-    return {
-      posts,
-      isPostLoading,
-    };
-  },
-  data() {
-    return {
-      btnProps: {
-        name: "close",
-        color: "white",
-      },
-      modelValue: "",
-      selected: "",
-      sortOptions: [{ value: "title", name: "название" }],
-      showModal: false,
-      columns: [
-        { name: "id", text: "Id" },
-        { name: "title", text: "Заголовок" },
-        { name: "body", text: "Содержание" },
-      ],
-    };
-  },
-  methods: {
-    updateInput(event) {
-      this.$emit("update:modalValue", event.target.value);
-    },
-    openModal() {
-      this.showModal = true;
-    },
-  },
-};
+const btnProps = ref({
+  name: "close",
+  color: "white",
+})
+const columns = ref([
+  {name: "id", text: "Id"},
+  {name: "title", text: "Заголовок"},
+  {name: "body", text: "Содержание"},
+])
+const modelValue = ref("")
+const selected = ref("")
+const showModal = ref(false)
+const sortOptions = ref([{value: "title", name: "название"}])
+const {posts, isPostLoading} = usePosts();
+
+function openModal(): void {
+  showModal.value = true;
+}
+
+
 </script>
 <style scoped lang="scss"></style>
