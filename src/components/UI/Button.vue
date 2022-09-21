@@ -9,11 +9,7 @@
   </button>
 </template>
 <script setup lang="ts">
-const props:any = defineProps({
-  btnProps: {
-    type: Object,
-  },
-})
+const props = defineProps<{btnProps?: object}>()
 </script>
 
 <style scoped lang="scss">

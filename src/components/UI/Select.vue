@@ -19,17 +19,13 @@
 </template>
 
 <script setup lang="ts">
-interface Props {
-  modelValue: string
-  options: object[]
-}
-
-const props = withDefaults(defineProps<Props>(), {
-  modelValue: String,
-  options: () => []
-})
+const props = defineProps<{
+  modelValue: string;
+  options: object[];
+}>()
 
 const emits = defineEmits(["update:modelValue"]);
+
 </script>
 <style scoped lang="scss">
 .select {

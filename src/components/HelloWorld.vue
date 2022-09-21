@@ -1,14 +1,16 @@
 <template>
+  <section class="todo">
   <div class="container">
     <div class="my-components">
-      <VInput v-model="modelValue" placeholder="Ввод"/>
+      <VInput v-model="inputValue" placeholder="Ввод"/>
       <VBtn @click="openModal" :btnProps="btnProps"> Открыть модалку</VBtn>
       <VSelect v-model="selected" :options="sortOptions"/>
       <span>{{selected}}</span>
-      <VModal v-model:show="showModal"> {{ modelValue }}</VModal>
+      <VModal v-model:show="showModal"> {{ inputValue }}</VModal>
     </div>
     <VTable :dataValues="posts" :columns="columns"/>
   </div>
+    </section>
 </template>
 <script setup lang="ts">
 import {ref} from "vue";
@@ -28,7 +30,7 @@ const columns = ref([
   {name: "title", text: "Заголовок"},
   {name: "body", text: "Содержание"},
 ])
-const modelValue = ref("")
+const inputValue = ref("")
 const selected = ref("")
 const showModal = ref(false)
 const sortOptions = ref([

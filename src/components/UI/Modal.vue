@@ -10,13 +10,7 @@
 const props = defineProps<{
   show: boolean
 }>()
-
-// const emits = defineEmits([
-//
-// ])
-
-
-
+const emits = defineEmits(["update:modelValue"]);
 </script>
 
 <style scoped lang="scss">
