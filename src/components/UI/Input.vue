@@ -1,3 +1,11 @@
+<template>
+  <input
+      type="text"
+      class="input"
+      :value="modelValue"
+      @input="$emit('update:modelValue', $event.target.value)"
+  />
+</template>
 <script setup lang="ts">
 defineProps({
   modelValue: {
@@ -8,12 +16,20 @@ defineEmits(
     ["update:modelValue"]
 )
 </script>
-<template>
-  <input
-      type="text"
-      class="input"
-      :value="modelValue"
-      @input="$emit('update:modelValue', $event.target.value)"
-  />
-</template>
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.input {
+  display: block;
+  border: 1px solid #1a73e8;
+  border-radius: 5px;
+  height: 100%;
+  padding: 5px;
+
+  &:focus {
+    color: #212529;
+    background-color: #fff;
+    border-color: #bdbdbd;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(158, 158, 158, 0.25);
+  }
+}
+</style>

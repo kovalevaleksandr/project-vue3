@@ -1,10 +1,13 @@
 <template>
-  <div>
-    <VInput v-model="modelValue" placeholder="Ввод"/>
-    <VBtn @click="openModal" :btnProps="btnProps"> Открыть модалку</VBtn>
-    <VSelect v-model="selected" :options="sortOptions"></VSelect>
-    <VModal v-model:show="showModal"> {{ modelValue }}</VModal>
-    <VTable :dataValues="posts" :columns="columns"></VTable>
+  <div class="container">
+    <div class="my-components">
+      <VInput v-model="modelValue" placeholder="Ввод"/>
+      <VBtn @click="openModal" :btnProps="btnProps"> Открыть модалку</VBtn>
+      <VSelect v-model="selected" :options="sortOptions"/>
+      <span>{{selected}}</span>
+      <VModal v-model:show="showModal"> {{ modelValue }}</VModal>
+    </div>
+    <VTable :dataValues="posts" :columns="columns"/>
   </div>
 </template>
 <script setup lang="ts">
@@ -12,8 +15,8 @@ import {ref} from "vue";
 import {usePosts} from "@/hooks/usePosts";
 import VTable from "./UI/Table.vue";
 import VInput from "@/components/UI/Input.vue";
-import VBtn from "@/components/UI/Button.vue";
 import VSelect from "@/components/UI/Select.vue";
+import VBtn from "@/components/UI/Button.vue";
 import VModal from "@/components/UI/Modal.vue";
 
 const btnProps = ref({
@@ -28,8 +31,11 @@ const columns = ref([
 const modelValue = ref("")
 const selected = ref("")
 const showModal = ref(false)
-const sortOptions = ref([{value: "title", name: "название"}])
-const {posts, isPostLoading} = usePosts();
+const sortOptions = ref([
+  {value: "id", name: "id"},
+  {value: "title", name: "название"},
+])
+const {posts} = usePosts();
 
 function openModal(): void {
   showModal.value = true;
@@ -37,4 +43,18 @@ function openModal(): void {
 
 
 </script>
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.container {
+    max-width: 1240px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.my-components {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+</style>

@@ -3,7 +3,6 @@ import { onMounted, ref } from "vue";
 
 export function usePosts() {
   const posts = ref([]);
-  const isPostLoading = ref(true);
   const fetching = async () => {
     try {
       const response = await axios.get(
@@ -17,6 +16,5 @@ export function usePosts() {
   onMounted(fetching);
   return {
     posts,
-    isPostLoading,
   };
 }

@@ -1,37 +1,31 @@
 <template>
   <table>
     <thead>
-    <tr>
-      <th
-          v-for="column in columns"
-          :key="column.name">
-        {{ column.text }}
-      </th>
-    </tr>
+      <tr>
+        <th v-for="column in columns" :key="column.name">
+          {{ column.text }}
+        </th>
+      </tr>
     </thead>
-    <tr
-        v-for="dataValue in dataValues"
-    >
-      <td>{{dataValue.id}}</td>
-
-      <td>{{dataValue.title}}</td>
-
-      <td>{{dataValue.body}}</td>
+    <tr v-for="dataValue in dataValues">
+      <td>{{ dataValue.id }}</td>
+      <td>{{ dataValue.title }}</td>
+      <td>{{ dataValue.body }}</td>
     </tr>
   </table>
 </template>
 <script setup lang="ts">
 interface Props {
-  columns: object[]
-  dataValues: object[]
+  columns: object[];
+  dataValues: object[];
 }
-const props = withDefaults(defineProps<Props>(),{
-  columns: ()=> [
+const props = withDefaults(defineProps<Props>(), {
+  columns: () => [
     { name: "id", text: "Id" },
     { name: "title", text: "Заголовок" },
     { name: "body", text: "Содержание" },
   ],
-  dataValues: ()=> []
+  dataValues: () => [],
 });
 </script>
 
