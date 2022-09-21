@@ -28,7 +28,4 @@ export default {
   display: flex;
   flex-direction: column;
 }
-.main {
-  flex: 1 1 auto;
-}
 </style>

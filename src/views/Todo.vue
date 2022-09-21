@@ -1,8 +1,8 @@
 <template>
   <section class="todo">
     <div class="container">
-      <TodoCreate :inputValue="inputValue" @click="addTodo" />
-      <TodoList :items="items" />
+      <TodoCreate :modelValue="modelValue" @throwTodo="addTodo"/>
+      <TodoList @deleteTodo="deleteTodo" :items="items" />
     </div>
   </section>
 </template>
@@ -12,11 +12,20 @@ import { usePosts } from "@/hooks/usePosts";
 import TodoCreate from "@/components/todolist/TodoCreate.vue";
 import TodoList from "@/components/todolist/TodoList.vue";
 
-const inputValue = ref("");
-const items = ref([]);
-function addTodo() {
-  console.log('add');
+
+
+const items = ref([
+  {id: 0, name: 'Sasha'},
+  {id: 1, name: 'Dasha'}
+]);
+function addTodo(modelValue): void {
+items.value.push({id: 2, name: modelValue.value})
 }
+function deleteTodo(id:number): object[] {
+  console.log(id)
+  items.value = items.value.filter(i=> i.id !== id)
+}
+
 </script>
 <style scoped lang="scss">
 .container {

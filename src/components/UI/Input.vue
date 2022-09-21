@@ -24,12 +24,6 @@ defineEmits(
   height: 100%;
   padding: 5px;
 
-  &:focus {
-    color: #212529;
-    background-color: #fff;
-    border-color: #bdbdbd;
-    outline: 0;
-    box-shadow: 0 0 0 0.2rem rgba(158, 158, 158, 0.25);
-  }
+
 }
 </style>

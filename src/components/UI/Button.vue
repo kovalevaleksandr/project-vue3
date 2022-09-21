@@ -23,5 +23,6 @@ const props = defineProps<{btnProps?: object}>()
   font-family: "JetBrains Mono Medium", sans-serif;
   background-color: #1a73e8;
   color: #ffffff;
+  cursor: pointer;
 }
 </style>
