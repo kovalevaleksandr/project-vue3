@@ -7,7 +7,7 @@
         @clicker="getFilter"
         :meaning="btn.id"
         :btnProps="btnProps"
-        :class="{'filter__item--active': filterActive === btn.id}"
+        :class="getStyle(btn.id)"
     >
       <span>{{btn.name}}</span>
     </Btn>
@@ -25,6 +25,9 @@ const props = defineProps<{
 }>()
 const emits = defineEmits(['getFilter'])
 
+const getStyle = (btnId:string)=> {
+  return {'filter__item--active': props.filterActive === btnId, filter__item: true}
+}
 const styleFilter = computed(()=> {
   return props.filterActive === Btn.id
 })
