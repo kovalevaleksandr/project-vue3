@@ -1,26 +1,48 @@
 <template>
   <div class="list">
-<TodoItem
-    @deleteTodo="deleteTodo"
-    class="list__item"
-    v-for="item of props.items"
-    :key="item.id"
-    :item="item"
-/>
+    <div class="list--empty" v-if="items.length === 0"><p>Нет задач!</p></div>
+
+    <TodoItem
+      class="list__item"
+      v-for="item of filterElement"
+      :key="item.id"
+      :item="item"
+      @showInfo.self="showInfo"
+      @deleteTodo="deleteTodo"
+      v-else
+    />
   </div>
 </template>
 <script setup lang="ts">
-import TodoItem from "@/components/todolist/TodoItem"
-const emits = defineEmits(['deleteTodo', 'post'])
-
-function deleteTodo() {
-  emits('deleteTodo', 'post')
+import { computed } from "vue";
+import TodoItem from "@/components/todolist/TodoItem";
+interface filterId {
+  [key: string]: any
 }
-
-
+const emits = defineEmits(["deleteTodo", "showInfo"]);
 const props = defineProps<{
-  items: object[]
-}>()
+  items: filterId[];
+  filterActive: string;
+}>();
 
-console.log(props.items)
+
+
+let filterElement = computed(() => {
+  switch (props.filterActive) {
+    case "all":
+      return props.items;
+    case "active":
+      return props.items.filter((i) => !i.completed);
+    case "completed":
+      return props.items.filter((i) => i.completed);
+  }
+});
+
+function deleteTodo(id: number) {
+  emits("deleteTodo", id);
+}
+``;
+function showInfo(i: string) {
+  emits("showInfo", i);
+}
 </script>
