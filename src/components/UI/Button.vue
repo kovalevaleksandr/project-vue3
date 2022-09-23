@@ -13,7 +13,6 @@ const props = defineProps<{
 }>();
 const emits = defineEmits(["clicker"]);
 function clicker() {
-  console.log("первый клик", props.meaning);
   emits("clicker", props.meaning);
 }
 </script>

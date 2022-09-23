@@ -6,8 +6,8 @@
           <img src="@/assets/images/logo.svg" alt="logo" class="header__logo-img">
         </div>
         <nav class="header__nav">
-          <router-link class="header__nav-item" to="/">Таблица</router-link>
-          <router-link class="header__nav-item" to="/todolist">Туду лист</router-link>
+          <router-link class="header__nav-item" to="/">Table</router-link>
+          <router-link class="header__nav-item" to="/todolist">TodoList</router-link>
         </nav>
         <div class="header__login">
           <span>login</span>
@@ -24,7 +24,6 @@
   padding: 23px 0;
   background: #FFFFFF;
   box-shadow: inset 0px -1px 0px #F0F0F0;
-  margin-bottom: 60px;
 
   &__container {
     max-width: 1840px;

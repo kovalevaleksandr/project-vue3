@@ -1,16 +1,25 @@
 <template>
-  <div class="modal" v-if="props.show" @click.stop="$emit('update:show', false)">
-    <div class="modal__content">
+  <div
+    class="modal"
+    v-if="props.show"
+    @click.stop="hideDialog"
+  >
+    <div class="modal__content" @click.stop>
       <slot></slot>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-const props = defineProps<{
-  show: boolean
-}>()
-const emits = defineEmits(["update:modelValue"]);
+const props = withDefaults(defineProps<{ show: boolean }>(), {
+  show: false
+})
+const emits = defineEmits(["update:show"]);
+function hideDialog() {
+  emits('update:show', false)
+}
+
+
 </script>
 
 <style scoped lang="scss">
@@ -24,12 +33,8 @@ const emits = defineEmits(["update:modelValue"]);
   display: flex;
 
   &__content {
-    color: #000000;
     margin: auto;
     background-color: #ffffff;
-    width: 100%;
-    max-width: 300px;
-    padding: 30px;
   }
 }
 </style>

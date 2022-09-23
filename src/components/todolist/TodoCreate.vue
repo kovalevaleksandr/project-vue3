@@ -1,6 +1,6 @@
 <template>
   <div class="create">
-    <Input
+    <MyInput
       class="create__input"
       v-model="modelValue"
       @keydown.enter="addTodo"
@@ -13,16 +13,17 @@
 </template>
 <script setup lang="ts">
 import { ref } from "vue";
-import Input from "@/components/UI/Input.vue";
+import MyInput from "@/components/UI/MyInput.vue";
 import Btn from "@/components/UI/Button.vue";
 const btnProps = {
   name: "add",
   color: "white",
 };
+
 const modelValue = ref("");
 
 const props = defineProps<{
-  modelValue: string;
+  title: "string";
 }>();
 
 const emits = defineEmits(["throwTodo"]);

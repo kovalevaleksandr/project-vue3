@@ -1,89 +1,133 @@
 <template>
-  <section class="todo">
-    <div class="container">
-      <TodoCreate class="todo__create" @throwTodo="addTodo" :model-value="rrr"/>
-      <TodoFilter
-        class="todo__filter"
-        :filterBtn="filterBtn"
-        @getFilter="getFilter"
-        :filterActive="filterActive"
-      />
-      <TodoList
-        @deleteTodo="deleteTodo"
-        :items="items"
-        @showInfo="showInfo"
-        :filterActive="filterActive"
-      />
-      <Modal v-model:show="dialogVisible">{{ dataModal }}</Modal>
+  <div class="todo">
+    <div class="todo__container">
+      <div class="todo__wrapper">
+        <TodoCreate
+          class="todo__create"
+          @throwTodo="addTodo"
+          v-model="title"
+        />
+        <TodoFilter
+          class="todo__filter"
+          :filterBtn="filterBtn"
+          @getFilter="getFilter"
+          :filterActive="filterActive"
+        />
+        <TodoList
+          @deleteTodo="deleteTodo"
+          @showInfo="showInfo"
+          @saveTodo="saveTodo"
+          @editTodo="editTodo"
+          :items="items"
+          :filterActive="filterActive"
+        />
+        <Modal v-model:show="dialogVisible" class="about">
+          <div class="about__title">
+            <h2>Подробнее:</h2>
+          </div>
+          <div class="about__body">
+            <span>Название задачи: {{ textShow.title }}</span>
+            <span>Добавлена: {{ textShow.date }} </span>
+            <span>Выполнение:
+              <span v-if="textShow.completed">да</span>
+              <span v-else>нет</span>
+            </span>
+          </div>
+        </Modal>
+      </div>
     </div>
-  </section>
+  </div>
 </template>
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { ref, computed, onMounted, watch } from "vue";
 import TodoCreate from "@/components/todolist/TodoCreate";
 import TodoList from "@/components/todolist/TodoList";
 import TodoFilter from "@/components/todolist/TodoFilter.vue";
 import Modal from "@/components/UI/Modal.vue";
 
-const items = ref([
-  {id: 0, title: "hi", completed: false, date: "Thu Sep 22 2022 10:27:33 GMT+0300 (Москва, стандартное время)",},
-  {id: 1, title: "hello", completed: false, date: "Thu Sep 22 2022 10:27:33 GMT+0300 (Москва, стандартное время)",},
-]);
-
-
-const rrr = ref('')
+const title = ref("");
+const items = ref([]);
 const filterActive = ref("all");
 const filterBtn = ref([
   { id: "all", name: "Все задания" },
   { id: "active", name: "Активные задания" },
   { id: "completed", name: "Выполненные задания" },
 ]);
+const dialogVisible = ref(false);
+const STORAGE_KEY = "todoList"
+
+onMounted(() => {
+  items.value = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]") ;
+});
+
+function editTodo() {
+  dialogVisible.value = true;
+}
+
+watch(
+  items,
+  (newValue) => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(newValue));
+  },
+  { deep: true }
+);
+
+let lastId = computed(() => {
+  // return items.value.at(-1)?.id;
+  return items.value[items.value.length - 1]?.id;
+});
+
 function getFilter(id: string): void {
   filterActive.value = id;
 }
-const dialogVisible = ref(false);
-const dataModal = ref("");
 
-function showInfo(text: string) {
+function showInfo(info) {
   dialogVisible.value = true;
-  dataModal.value = text;
+  textShow.value.title = info.title;
+  textShow.value.date = info.date;
+  textShow.value.completed = info.completed;
 }
 
-function addTodo(title: string): void {
+const textShow = ref({title:'', date: '', completed:''});
+
+//undefined не придет что делать
+function saveTodo(id: number, newText: string) {
+  items.value.find((i) => i.id === id).title = newText;
+}
+
+function addTodo(title): void {
   items.value.push({
-    id: (lastId.value + 1  || 0),
+    id: lastId.value + 1 || 0,
     title,
     completed: false,
     date: Date(),
   });
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(items.value));
 }
 
 function deleteTodo(id: number): object[] {
-  console.log(items.value)
   items.value = items.value.filter((i) => i.id !== id);
   return items.value;
 }
-
-let lastId = computed(() => {
-  console.log(items.value[items.value.length - 1])
-  // return items.value.at(-1)?.id;
-  return items.value[items.value.length - 1]?.id;
-
-});
 </script>
 <style scoped lang="scss">
-.container {
-  max-width: 1240px;
-  width: 100%;
-  margin: 0 auto;
-  padding: 0 20px;
-}
-
 .todo {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  margin-top: 6rem;
+  background: #fafafa;
+
+  &__container {
+    max-width: 124rem;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  &__wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
 
   &__filter {
     align-self: flex-start;
@@ -92,6 +136,18 @@ let lastId = computed(() => {
 
   &__create {
     margin-bottom: 4rem;
+  }
+
+  .about {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    &__body {
+      display: flex;
+      flex-direction: column;
+    }
   }
 }
 </style>

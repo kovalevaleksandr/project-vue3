@@ -17,8 +17,6 @@
 import Btn from "@/components/UI/Button.vue";
 import {computed} from "vue";
 
-console.log('BTN', Btn)
-
 const props = defineProps<{
   filterBtn: object[]
   filterActive: string
