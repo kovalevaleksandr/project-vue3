@@ -2,12 +2,10 @@
   <div class="filter">
     <Btn
         class="filter__item"
+        :class="getStyle(btn.id)"
         v-for="btn in filterBtn"
         :key="btn.id"
-        @clicker="getFilter"
-        :meaning="btn.id"
-        :btnProps="btnProps"
-        :class="getStyle(btn.id)"
+        @click="getFilter(btn.id)"
     >
       <span>{{btn.name}}</span>
     </Btn>
@@ -18,23 +16,23 @@ import Btn from "@/components/UI/Button.vue";
 import {computed} from "vue";
 
 const props = defineProps<{
-  filterBtn: object[]
   filterActive: string
 }>()
-const emits = defineEmits(['getFilter'])
+const emits = defineEmits(
+    ['getFilter']
+)
 
-const getStyle = (btnId:string)=> {
-  return {'filter__item--active': props.filterActive === btnId, filter__item: true}
-}
-const styleFilter = computed(()=> {
-  return props.filterActive === Btn.id
-})
+const filterBtn = [
+  { id: "all", name: "Все задания" },
+  { id: "active", name: "Активные задания" },
+  { id: "completed", name: "Выполненные задания" },
+];
 
-const btnProps = {
-  name: "add",
-  color: "white",
+const getStyle = (btnId:string) => {
+  return {'filter__item--active': props.filterActive === btnId}
 }
-function getFilter(id:string):void {
+
+const getFilter = (id:string):void => {
   emits('getFilter' , id)
 }
 </script>

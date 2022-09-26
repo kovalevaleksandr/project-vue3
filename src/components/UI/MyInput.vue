@@ -3,18 +3,22 @@
       type="text"
       class="input"
       :value="modelValue"
-      @input="$emit('update:modelValue', $event.target.value)"
+      @input="getValue"
   />
 </template>
 <script setup lang="ts">
 
 const props = defineProps<{
-  modelValue: [String, Number],
+  modelValue: string,
 }>()
 
-const emits = defineEmits(
-    ["update:modelValue"]
+const emits = defineEmits([
+    "update:modelValue",
+    ]
 )
+const getValue = (event: { target: { value: any; }; }) => {
+  emits("update:modelValue", event.target.value)
+}
 </script>
 <style scoped lang="scss">
 .input {

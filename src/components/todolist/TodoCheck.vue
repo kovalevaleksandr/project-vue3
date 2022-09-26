@@ -8,7 +8,7 @@
 
 <script setup lang="ts">
 const props = defineProps<{
-  value: boolean,
+  modelValue: boolean,
 }>()
 const emits = defineEmits(
     ["update:modelValue"]

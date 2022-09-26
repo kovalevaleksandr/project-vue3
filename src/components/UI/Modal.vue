@@ -11,11 +11,15 @@
 </template>
 
 <script setup lang="ts">
-const props = withDefaults(defineProps<{ show: boolean }>(), {
+const props = withDefaults(defineProps<{
+  show: boolean
+}>(), {
   show: false
 })
-const emits = defineEmits(["update:show"]);
-function hideDialog() {
+const emits = defineEmits(
+    ["update:show"]
+);
+const hideDialog = () :void => {
   emits('update:show', false)
 }
 

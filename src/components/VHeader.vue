@@ -3,11 +3,12 @@
     <div class="header__container">
       <div class="header__wrapper">
         <div class="header__logo">
-          <img src="@/assets/images/logo.svg" alt="logo" class="header__logo-img">
+          <router-link class="header__nav-item" to="/">
+            <img src="@/assets/images/logo.svg" alt="logo" class="header__logo-img">
+          </router-link>
         </div>
         <nav class="header__nav">
-          <router-link class="header__nav-item" to="/">Table</router-link>
-          <router-link class="header__nav-item" to="/todolist">TodoList</router-link>
+          <router-link class="header__nav-item" to="/">Todo</router-link>
         </nav>
         <div class="header__login">
           <span>login</span>
@@ -39,6 +40,9 @@
   }
 
   &__logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     margin-right: 2rem;
 
     &-img {

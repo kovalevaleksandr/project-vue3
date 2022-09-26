@@ -1,20 +1,19 @@
 <template>
-  <button class="btn" @click="clicker">
-    <span class="material-icons" :style="{ color: props.btnProps.color }">
-      {{ props.btnProps.name }}
-    </span>
+  <button class="btn">
+    <i
+        class="material-icons"
+        :style="{ color: props.color }"
+    >
+      {{ props.name }}
+    </i>
     <slot></slot>
   </button>
 </template>
 <script setup lang="ts">
 const props = defineProps<{
-  btnProps?: object;
-  meaning?: string | number;
+  name?: string;
+  color?: string;
 }>();
-const emits = defineEmits(["clicker"]);
-function clicker() {
-  emits("clicker", props.meaning);
-}
 </script>
 
 <style scoped lang="scss">

@@ -1,57 +1,107 @@
 <template>
   <div
-    class="item"
-    :class="{ 'item--completed': props.item.completed }"
-    @click.self="showInfo"
-  >
-    <TodoCheck
-      class="item__check"
-      v-model="props.item.completed"
-      :checked="props.item.completed"
-    />
-    <TodoInput
-      class="item__text"
-      :class="{ 'item__text--completed': props.item.completed }"
-      :value="props.item.title"
-      :readonly="stateEdit"
+      class="item"
+      :class="{ 'item--completed': props.item.completed }"
       @click.self="showInfo"
+  >
+
+    <TodoCheck
+        class="item__check"
+        v-model="props.item.completed"
+        :checked="props.item.completed"
+        value
     />
 
-    <TodoEdit class="item__edit" @editTodo="editTodo" v-if="stateEdit" />
-    <TodoSave class="item__save" @saveTodo="saveTodo" v-else />
+    <TodoInput
+        class="item__text"
+        :class="{ 'item__text--completed': props.item.completed }"
+        :value="props.item.title"
+        :readonly="stateEdit"
+        @click="showInfo"
+        model-value="props.item.title"
+    />
 
-    <TodoDelete class="item__delete" @click.stop="deleteTodo" />
+    <div
+        :class="[stateEdit ? 'item__edit' : 'item__save', stateEdit ? 'edit' : 'save',]"
+
+    >
+      <img
+          class="edit__img"
+          src="@/assets/images/edit.svg"
+          alt="edit"
+          @click="editTodo"
+          v-if="stateEdit"
+      >
+      <img
+          src="@/assets/images/save.svg"
+          alt="save"
+          @click="saveTodo"
+          v-else
+      >
+
+    </div>
+
+    <div
+        class="item__delete delete"
+        @click.stop="deleteTodo"
+    >
+      <img src="@/assets/images/delete.svg" alt="del">
+    </div>
+
+    <teleport to="body">
+      <Modal
+          v-model:show="editVisible"
+      >
+        <TodoEdit
+            :title="item.title"
+            @edit="saveTodo"
+        />
+      </Modal>
+    </teleport>
   </div>
 </template>
 <script setup lang="ts">
+import {ref} from "vue";
 import TodoCheck from "@/components/todolist/TodoCheck.vue";
-import TodoEdit from "@/components/todolist/TodoEdit.vue";
-import TodoDelete from "@/components/todolist/TodoDelete.vue";
-import TodoSave from "@/components/todolist/TodoSave.vue";
 import TodoInput from "@/components/UI/MyInput.vue";
-import { ref } from "vue";
-const emits = defineEmits(["deleteTodo", "showInfo", "editTodo", "saveTodo"]);
+import TodoEdit from "@/components/todolist/TodoEdit.vue"
+import Modal from "@/components/UI/Modal.vue"
+import {TodoItems} from "@/types"
+
+const emits = defineEmits([
+  "deleteTodo", "showInfo", "editTodo", "saveTodo"
+]);
+
+const props = defineProps<{
+  item: TodoItems;
+}>();
 
 const stateEdit = ref(true);
 
-const props = defineProps<{
-  item: object;
-}>();
-function showInfo(): void {
-  emits("showInfo", {title: props.item.title, date: props.item.date, completed: props.item.completed});
+const showInfo = (): void => {
+  emits("showInfo");
 }
 
-function editTodo(): void {
+const editVisible = ref(false)
+
+// const edit = (newTitle: string): void => {
+//   console.log(newTitle)
+// }
+
+const editTodo = (): void => {
   stateEdit.value = false;
+  editVisible.value = true;
   emits("editTodo");
 }
-function saveTodo(): void {
+
+const saveTodo = () :void => {
+  console.log('save')
   stateEdit.value = true;
-  emits("saveTodo", props.item.id, "Новое значение");
+  emits("saveTodo");
 }
 
-function deleteTodo(): void {
-  emits("deleteTodo", props.item.id);
+const deleteTodo = (): void => {
+  emits("deleteTodo");
 }
 </script>
 <style lang="scss" scoped>
@@ -115,9 +165,11 @@ function deleteTodo(): void {
       outline: none;
     }
   }
+
   &__edit {
     margin-right: 2.4rem;
   }
+
   &__delete {
   }
 }

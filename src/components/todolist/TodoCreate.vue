@@ -1,37 +1,46 @@
 <template>
   <div class="create">
     <MyInput
-      class="create__input"
-      v-model="modelValue"
-      @keydown.enter="addTodo"
-      placeholder="Введите название задания"
+        class="create__input"
+        placeholder="Введите название задания"
+
+        v-model="title"
+
+        @keydown.enter="addTodo"
     />
-    <Btn class="create__btn" :btnProps="btnProps" @clicker="addTodo">
+    <Btn
+        class="create__btn"
+        @click="addTodo"
+        name="add"
+        color="#ffffff"
+    >
       Добавить задание
     </Btn>
   </div>
 </template>
 <script setup lang="ts">
-import { ref } from "vue";
 import MyInput from "@/components/UI/MyInput.vue";
 import Btn from "@/components/UI/Button.vue";
-const btnProps = {
-  name: "add",
-  color: "white",
-};
+import {ref} from "vue";
 
-const modelValue = ref("");
+const title = ref("");
 
 const props = defineProps<{
-  title: "string";
+
 }>();
 
-const emits = defineEmits(["throwTodo"]);
+const emits = defineEmits([
+    "addTodo"
+]);
 
 function addTodo(): void {
-  emits("throwTodo", modelValue.value);
-  modelValue.value = "";
+  emits("addTodo", title.value);
+  title.value = '';
 }
+
+// function create(): void {
+//   emits('create', props.title)
+// }
 </script>
 <style lang="scss" scoped>
 .create {
