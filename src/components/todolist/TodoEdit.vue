@@ -27,6 +27,7 @@ const props = defineProps<{
 }>();
 
 const edit = () :void => {
+  console.log('enter')
   emits("edit", newTitle.value)
 }
 </script>

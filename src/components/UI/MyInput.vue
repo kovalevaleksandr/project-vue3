@@ -16,7 +16,7 @@ const emits = defineEmits([
     "update:modelValue",
     ]
 )
-const getValue = (event: { target: { value: any; }; }) => {
+const getValue = (event: { target: { value: string; }; }) => {
   emits("update:modelValue", event.target.value)
 }
 </script>

@@ -41,18 +41,16 @@ import TodoFilter from "@/components/todolist/TodoFilter.vue";
 import Modal from "@/components/UI/Modal.vue";
 import TodoAbout from "@/components/todolist/TodoAbout.vue";
 import {TodoItems} from "@/types"
-import axios from "axios";
 
 const items = ref([]);
 const filterActive = ref("all");
 const dialogVisible = ref(false);
 const modalEdit = ref(false);
-const textShow = ref({title: '', date: '', completed: ''});
+const textShow = ref({title: '', date: '', completed: false});
 const STORAGE_KEY = "todoList"
 
 onMounted(() => {
-
-  items.value = (JSON.parse(localStorage.getItem(STORAGE_KEY)) || '[]');
+  items.value = (JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'));
 });
 
 watch(
@@ -64,7 +62,7 @@ watch(
 );
 
 const lastId = computed(() => {
-  return items.value.at(-1)?.id;
+    return  items.value.at(-1)?.id
 });
 
 const editTodo = () :void => {
@@ -85,9 +83,9 @@ const showInfo = (item: TodoItems): void => {
 }
 
 //undefined не придет что делать
-const saveTodo = (item :TodoItems, newTitle: string,) :void => {
+const saveTodo = (newTitle: string, item :TodoItems) :void => {
   console.log(newTitle)
-  items.value.find((i) => i.id === item.id).title = 'newTitle';
+  items.value.find((i) => i.id === item.id).title = newTitle;
 }
 
 const addTodo = (title: string): void => {
@@ -97,12 +95,10 @@ const addTodo = (title: string): void => {
     completed: false,
     date: Date(),
   });
-
 }
 
-const deleteTodo = (item: TodoItems): TodoItems[] => {
+const deleteTodo = (item: TodoItems): void => {
   items.value = items.value.filter((i) => i.id !== item.id);
-  return items.value;
 }
 </script>
 <style scoped lang="scss">

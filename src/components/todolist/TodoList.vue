@@ -14,7 +14,11 @@
           @showInfo="showInfo(item)"
           @deleteTodo="deleteTodo(item)"
           @editTodo="editTodo"
-          @saveTodo="saveTodo(item)"
+
+
+          @saveTodo="saveTodo($event, item)"
+
+
           v-else
       />
 
@@ -34,6 +38,11 @@ const props = defineProps<{
   filterActive: string;
 }>();
 
+const saveTodo = (newTitle: string, item: TodoItems): void => {
+  console.log('list', newTitle, item)
+  emits('saveTodo', newTitle, item)
+}
+
 const filterElement = computed(() => {
   switch (props.filterActive) {
     case "all":
@@ -47,11 +56,6 @@ const filterElement = computed(() => {
 
 function deleteTodo(item: TodoItems): void {
   emits("deleteTodo", item);
-}
-
-const saveTodo = (newTitle: string, item: TodoItems): void => {
-  console.log('list', newTitle, item)
-  emits('saveTodo', newTitle, item)
 }
 
 const showInfo = (item: TodoItems): void => {

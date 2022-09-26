@@ -22,7 +22,7 @@
     />
 
     <div
-        :class="[stateEdit ? 'item__edit' : 'item__save', stateEdit ? 'edit' : 'save',]"
+        :class="[stateEdit ? 'item__edit' : 'item__save', stateEdit ? 'edit' : 'save']"
 
     >
       <img
@@ -94,10 +94,11 @@ const editTodo = (): void => {
   emits("editTodo");
 }
 
-const saveTodo = () :void => {
+const saveTodo = (newTitle: string) :void => {
   console.log('save')
   stateEdit.value = true;
-  emits("saveTodo");
+  editVisible.value = false;
+  emits("saveTodo", newTitle);
 }
 
 const deleteTodo = (): void => {
