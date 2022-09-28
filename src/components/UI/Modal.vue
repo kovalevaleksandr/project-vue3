@@ -35,10 +35,12 @@ const hideDialog = () :void => {
   background-color: rgba(0, 0, 0, 0.5);
   position: fixed;
   display: flex;
+  z-index: 998;
 
   &__content {
     margin: auto;
     background-color: #ffffff;
+    z-index: 999;
   }
 }
 </style>

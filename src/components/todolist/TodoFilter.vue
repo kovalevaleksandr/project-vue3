@@ -43,7 +43,7 @@ const getFilter = (id:string):void => {
   align-items: center;
 
   &__item {
-    padding: 2px 8px;
+    padding: .2rem .8rem;
     background: #FFFFFF;
     border: 1px solid #DBE0E9;
     border-radius: 2px;

@@ -1,7 +1,7 @@
 <template>
   <button class="btn">
     <i
-        class="material-icons"
+        class="btn__icon material-icons"
         :style="{ color: props.color }"
     >
       {{ props.name }}
@@ -21,12 +21,10 @@ const props = defineProps<{
   display: flex;
   justify-content: center;
   align-items: center;
-  max-width: 300px;
-  border-radius: 5px;
-  padding: 5px 15px;
-  font-family: "JetBrains Mono Medium", sans-serif;
-  background-color: #1a73e8;
-  color: #ffffff;
   cursor: pointer;
+
+  &__icon {
+    margin-right: .8rem;
+  }
 }
 </style>

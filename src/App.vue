@@ -7,8 +7,8 @@
 </template>
 
 <script>
-import VHeader from "@/components/VHeader";
-import VFooter from "@/components/VFooter";
+import VHeader from "@/components/layout/VHeader";
+import VFooter from "@/components/layout/VFooter";
 export default {
   components: {
     VHeader,

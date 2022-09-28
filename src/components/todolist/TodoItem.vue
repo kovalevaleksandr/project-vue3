@@ -9,6 +9,7 @@
         class="item__check"
         v-model="props.item.completed"
         :checked="props.item.completed"
+        :class="{'item__check--completed' : props.item.completed}"
         value
     />
 
@@ -26,13 +27,14 @@
 
     >
       <img
-          class="edit__img"
+          class="img"
           src="@/assets/images/edit.svg"
           alt="edit"
           @click="editTodo"
           v-if="stateEdit"
       >
       <img
+          class="img"
           src="@/assets/images/save.svg"
           alt="save"
           @click="saveTodo"
@@ -45,10 +47,11 @@
         class="item__delete delete"
         @click.stop="deleteTodo"
     >
-      <img src="@/assets/images/delete.svg" alt="del">
+      <img class="img" src="@/assets/images/delete.svg" alt="del">
     </div>
 
     <teleport to="body">
+      <transition name="slide-fade">
       <Modal
           v-model:show="editVisible"
       >
@@ -57,6 +60,7 @@
             @edit="saveTodo"
         />
       </Modal>
+        </transition>
     </teleport>
   </div>
 </template>
@@ -95,7 +99,6 @@ const editTodo = (): void => {
 }
 
 const saveTodo = (newTitle: string) :void => {
-  console.log('save')
   stateEdit.value = true;
   editVisible.value = false;
   emits("saveTodo", newTitle);
@@ -140,12 +143,33 @@ const deleteTodo = (): void => {
     }
   }
 
-  &__check {
+  &__check,
+  &__save,
+  &__edit {
     margin-right: 2.4rem;
   }
 
-  &__save {
-    margin-right: 2.4rem;
+  &__check {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 1.6rem;
+    height: 1.6rem;
+    border: 1px solid #DBE0E9;
+    border-radius: 2px;
+    padding: .5rem .269rem .368rem .269rem;
+
+    & input {
+      display: none;
+    }
+
+    &--completed {
+      background: #1859FF;
+      border-radius: 2px;
+    }
+  }
+
+  &__delete {
   }
 
   &__text {
@@ -166,12 +190,19 @@ const deleteTodo = (): void => {
       outline: none;
     }
   }
+}
 
-  &__edit {
-    margin-right: 2.4rem;
-  }
+.slide-fade-enter-active {
+  transition: all 0.3s ease-out;
+}
 
-  &__delete {
-  }
+.slide-fade-leave-active {
+  transition: all 0.4s cubic-bezier(1, 0.5, 0.8, 1);
+}
+
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+  transform: translateX(20px);
+  opacity: 0;
 }
 </style>

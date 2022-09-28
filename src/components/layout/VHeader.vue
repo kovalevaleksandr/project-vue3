@@ -8,17 +8,37 @@
           </router-link>
         </div>
         <nav class="header__nav">
-          <router-link class="header__nav-item" to="/">Todo</router-link>
         </nav>
-        <div class="header__login">
+        <div
+            class="header__login"
+            @click="showAuth"
+        >
           <span>login</span>
         </div>
       </div>
     </div>
   </header>
+
+  <teleport to="body">
+  <transition name="slide-fade">
+    <Modal
+        v-model:show="authModalVisible"
+    >
+      <TodoAuth/>
+    </Modal>
+  </transition>
+  </teleport>
+
 </template>
 <script setup lang="ts">
+import {ref} from "vue";
+import Modal from "@/components/UI/Modal.vue"
+import TodoAuth from "@/components/todolist/Autharization/TodoAuth.vue"
 
+const authModalVisible = ref(false)
+const showAuth = (): void => {
+  authModalVisible.value = true
+}
 </script>
 <style scoped lang="scss">
 .header {
@@ -64,6 +84,22 @@
     }
   }
 
+  &__login {
+    cursor: pointer;
+  }
+}
 
+.slide-fade-enter-active {
+  transition: all 0.3s ease-out;
+}
+
+.slide-fade-leave-active {
+  transition: all 0.3s cubic-bezier(1, 0.5, 0.8, 1);
+}
+
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+  transform: translateX(20px);
+  opacity: 0;
 }
 </style>

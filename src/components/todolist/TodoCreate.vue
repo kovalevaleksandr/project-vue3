@@ -45,6 +45,8 @@ function addTodo(): void {
 <style lang="scss" scoped>
 .create {
   display: flex;
+  justify-content: center;
+  align-items: center;
   width: 100%;
 
   &:focus-within {
@@ -93,10 +95,18 @@ function addTodo(): void {
   }
 
   &__btn {
-    background: #1859ff;
+    background-color: #1859ff;
     border: 1px solid #1859ff;
     box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.1);
     border-radius: 0 2px 2px 0;
+    padding: .8rem 1.6rem;
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    text-align: center;
+    color: #FFFFFF;
   }
 }
 </style>
