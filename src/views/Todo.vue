@@ -6,6 +6,7 @@
             class="todo__create"
             title=""
             @addTodo="addTodo"
+            :items="items"
         />
         <TodoFilter
             class="todo__filter"
@@ -37,6 +38,7 @@
         <teleport to="body">
           <TodoAlert
               :alerts="alerts"
+              @cancelAction="cancelAction"
           />
         </teleport>
 
@@ -63,8 +65,9 @@ import TodoFilter from "@/components/todolist/TodoFilter.vue";
 import Modal from "@/components/UI/Modal.vue";
 import TodoAbout from "@/components/todolist/TodoAbout.vue";
 import TodoPagination from "@/components/todolist/TodoPagination.vue"
-import {TodoItems} from "@/types"
+import {IAlerts, TodoItems} from "@/types"
 import TodoAlert from "@/components/todolist/TodoAlert.vue"
+import {validEmail} from "@/services/Regex"
 
 const items = ref([]);
 const filterActive = ref("all");
@@ -72,10 +75,23 @@ const dialogVisible = ref(false);
 const modalEdit = ref(false);
 const textShow = ref({title: '', date: '', completed: false});
 const STORAGE_KEY = "todoList"
+const alerts = ref([])
+const limit = 10;
+const page = ref(1);
+const itemAfterDelete = ref([])
+
+const totalPage = computed(() => {
+  return Math.ceil(items.value.length / limit)
+});
+
+const lastId = computed(() => {
+  return items.value.at(-1)?.id
+});
 
 onMounted(() => {
   items.value = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]')
 });
+
 
 watch(
     items,
@@ -85,13 +101,7 @@ watch(
     {deep: true}
 );
 
-
-const limit = 10;
-const page = ref(1);
-
-const totalPage = computed(() => {
-  return Math.ceil(items.value.length / limit)
-});
+///////////////////page///////////////////
 
 const backPage = (): void => {
   if (page.value > 1) {
@@ -113,17 +123,28 @@ const postCurrent = computed(() => {
   return items.value.slice((page.value - 1) * 10, page.value * limit)
 })
 
-const lastId = computed(() => {
-  return items.value.at(-1)?.id
-});
+const pageAfterDelete = (): void => {
+  page.value = totalPage.value
+}
+
+//////////////////edit + save////////////////
 
 const editTodo = (): void => {
   modalEdit.value = true;
 }
 
+const saveTodo = (newTitle: string, item: TodoItems): void => {
+  items.value.find((i) => i.id === item.id).title = newTitle;
+}
+
+
+//////////////filter////////////////////
+
 function getFilter(id: string): void {
   filterActive.value = id;
 }
+
+////////////////info////////////////
 
 const showInfo = (item: TodoItems): void => {
   dialogVisible.value = true;
@@ -133,45 +154,6 @@ const showInfo = (item: TodoItems): void => {
   textShow.value.completed = item.completed;
 }
 
-const addTodo = (title: string): void => {
-  items.value.push({
-    id: lastId.value + 1 || 0,
-    title,
-    completed: false,
-    date: Date(),
-  });
-
-  page.value = totalPage.value
-
-  addAlerts()
-}
-
-const alerts = ref([])
-
-const addAlerts = () => {
-  alerts.value.unshift(
-      {
-        type: 'success',
-        title: 'Задание успешно выполнено',
-        cancel: true
-      }
-  )
-}
-
-// watch(
-//     alerts,
-//     () => {
-//       hideAlerts()
-//     },
-//     {deep: true}
-// );
-//
-// const hideAlerts = () => {
-//   setTimeout(() => {
-//     alerts.value.splice(0, 1)
-//   }, 3000)
-// }
-
 const typeAlerts = [
   {type: 'success', title: 'Задание успешно выполнено'},
   {type: 'info', title: 'Задание добавлено'},
@@ -179,27 +161,111 @@ const typeAlerts = [
   {type: 'danger', title: 'Задание не было добавлено'},
 ]
 
-//undefined не придет что делать
-const saveTodo = (newTitle: string, item: TodoItems): void => {
-  console.log(newTitle)
-  items.value.find((i) => i.id === item.id).title = newTitle;
+const addTodo = (title: string): void => {
+  const regValue = validEmail(title)
 
-  addAlerts()
+  if (title && !items.value.find((i) => i.title === title)) {
+    items.value.push({
+      id: Date.now(),
+      title,
+      completed: false,
+      date: Date(),
+    });
+    page.value = totalPage.value
+
+    alerts.value.push(
+        {
+          idTodo: getLastId.value,
+          id: Date.now(),
+          todo: title,
+          ...typeAlerts[1]
+        }
+    )
+  } else {
+    alerts.value.push(
+        {
+          idTodo: null,
+          id: Date.now(),
+          todo: '',
+          type: 'danger',
+          title: 'Задание не было добавлено',
+        }
+    )
+  }
 }
 
+
+
+const getLastId = computed(() => {
+  return items.value.at(-1)?.id
+})
+
+
+//////////////////delete//////////////////
+
 const deleteTodo = (item: TodoItems): void => {
-  //delete
+
+  itemAfterDelete.value.push({...item, lastPosinion: items.value.findIndex((i) => i.id === item.id)})
+
   items.value = items.value.filter((i) => i.id !== item.id);
 
   //go page
   pageAfterDelete()
 
-  //show alerts
-  addAlerts()
+  alerts.value.push(
+      {
+        idTodo: item.id,
+        id: Date.now(),
+        todo: item.title,
+        type: 'warning',
+        title: 'Задание удалено',
+      }
+  )
 }
 
-const pageAfterDelete = () :void => {
-  page.value = totalPage.value
+//////////////////alerts////////////////////
+
+onMounted(() => {
+  hideAlerts()
+})
+
+watch(
+    alerts,
+    () => {
+      hideAlerts()
+    },
+    {deep: true}
+);
+
+const hideAlerts = () => {
+  if (alerts.value.length) {
+    setTimeout(() => {
+      alerts.value.splice(0, 1)
+    }, 3000)
+  }
+}
+
+const cancelAction = (alert: IAlerts): void => {
+  const alertsId = alerts.value.findIndex((i) => i.idTodo === alert.id)
+  switch (alert.type) {
+    case "success":
+      break;
+    case "info":
+      const index = items.value.findIndex((i) => i.idTodo === alert.id)
+      items.value.splice(index, 1);
+      alerts.value.splice(alertsId, 1)
+      break;
+    case "warning":
+      const inItems = itemAfterDelete.value.find((i) => i.id === alert.idTodo)
+      const indexItems = itemAfterDelete.value.find((i) => i.id === alert.idTodo).lastPosinion
+      itemAfterDelete.value.splice(inItems, 1)
+      const itemItems = itemAfterDelete.value.find((i) => i.id === alert.idTodo)
+      delete itemItems.lastPosinion
+      items.value.splice(indexItems, 0, itemItems);
+      alerts.value.splice(alertsId, 1)
+      itemAfterDelete.value.splice(inItems, 1)
+      break;
+  }
 }
 
 </script>
@@ -209,7 +275,7 @@ const pageAfterDelete = () :void => {
   background: #fafafa;
 
   &__container {
-    max-width: 124rem;
+    max-width: 104rem;
     width: 100%;
     margin: 0 auto;
     padding: 0 2rem;

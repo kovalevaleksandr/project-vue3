@@ -19,7 +19,7 @@ const props = defineProps<{
   filterActive: string
 }>()
 const emits = defineEmits(
-    ['getFilter']
+    ["getFilter"]
 )
 
 const filterBtn = [
@@ -33,7 +33,7 @@ const getStyle = (btnId:string) => {
 }
 
 const getFilter = (id:string):void => {
-  emits('getFilter' , id)
+  emits("getFilter" , id)
 }
 </script>
 <style scoped lang="scss">

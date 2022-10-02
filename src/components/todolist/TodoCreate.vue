@@ -3,9 +3,7 @@
     <MyInput
         class="create__input"
         placeholder="Введите название задания"
-
         v-model="title"
-
         @keydown.enter="addTodo"
     />
     <Btn
@@ -14,7 +12,7 @@
         name="add"
         color="#ffffff"
     >
-      Добавить задание
+      <span>Добавить задание</span>
     </Btn>
   </div>
 </template>
@@ -22,11 +20,12 @@
 import MyInput from "@/components/UI/MyInput.vue";
 import Btn from "@/components/UI/Button.vue";
 import {ref} from "vue";
+import {TodoItems} from "@/types";
 
 const title = ref("");
 
 const props = defineProps<{
-
+items: TodoItems[]
 }>();
 
 const emits = defineEmits([
@@ -34,8 +33,8 @@ const emits = defineEmits([
 ]);
 
 function addTodo(): void {
-  emits("addTodo", title.value);
-  title.value = '';
+    emits("addTodo", title.value);
+    title.value = '';
 }
 
 // function create(): void {
@@ -57,7 +56,7 @@ function addTodo(): void {
     flex: 1;
     display: flex;
     align-items: center;
-    padding: 8px 12px;
+    padding: .9rem 1.2rem;
 
     font-family: "Inter", sans-serif;
     font-style: normal;
@@ -67,7 +66,7 @@ function addTodo(): void {
     color: #464646;
     background: #ffffff;
 
-    border: 1px solid #dbe0e9;
+    border: .1rem solid #dbe0e9;
     box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.1);
     border-radius: 2px 0 0 2px;
 
@@ -92,6 +91,15 @@ function addTodo(): void {
       border: 1px solid #1859ff;
       outline: 0;
     }
+
+    &::placeholder {
+      font-family: 'Inter', sans-serif;
+      font-style: normal;
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 24px;
+      color: #B4BAC4;
+    }
   }
 
   &__btn {
@@ -99,7 +107,7 @@ function addTodo(): void {
     border: 1px solid #1859ff;
     box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.1);
     border-radius: 0 2px 2px 0;
-    padding: .8rem 1.6rem;
+    padding: .7rem 1.6rem;
     font-family: 'Inter', sans-serif;
     font-style: normal;
     font-weight: 400;

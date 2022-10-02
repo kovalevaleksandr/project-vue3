@@ -1,5 +1,6 @@
 @import "normalize";
 @import "material-icons/iconfont/material-icons.css";
+@import "_fonts.scss";
 
 *,
 *::before,
@@ -51,18 +52,6 @@ h5,
 h6 {
   font-weight: inherit;
   font-size: inherit;
-}
-
-/*common*/
-
-.wrapper {
-  min-height: 100%;
-  display: flex;
-  flex-direction: column;
-}
-
-.main {
-  flex: 1 1 auto;
 }
 
 .img {
